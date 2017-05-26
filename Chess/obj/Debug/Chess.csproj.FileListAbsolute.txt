@@ -1,0 +1,6 @@
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\bin\Debug\Chess.exe.config
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\bin\Debug\Chess.exe
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\bin\Debug\Chess.pdb
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\obj\Debug\Chess.exe
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\obj\Debug\Chess.pdb
