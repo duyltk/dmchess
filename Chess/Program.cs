@@ -11,12 +11,82 @@ namespace Chess
         static String[,] chessBoard={
         {"r","k","b","q","a","b","k","r"},
         {"p","p","p","p","p","p","p","p"},
-        {" "," "," "," "," "," "," "," "},
+        {" "," ","K"," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
         {"P","P","P","P","P","P","P","P"},
         {"R","K","B","Q","A","B","K","R"}};
+
+		static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
+        { 0,  0,  0,  0,  0,  0,  0,  0},
+        {50, 50, 50, 50, 50, 50, 50, 50},
+        {10, 10, 20, 30, 30, 20, 10, 10},
+        { 5,  5, 10, 25, 25, 10,  5,  5},
+        { 0,  0,  0, 20, 20,  0,  0,  0},
+        { 5, -5,-10,  0,  0,-10, -5,  5},
+        { 5, 10, 10,-20,-20, 10, 10,  5},
+        { 0,  0,  0,  0,  0,  0,  0,  0}};
+        
+        static int[,] rookBoard={
+        { 0,  0,  0,  0,  0,  0,  0,  0},
+        { 5, 10, 10, 10, 10, 10, 10,  5},
+        {-5,  0,  0,  0,  0,  0,  0, -5},
+        {-5,  0,  0,  0,  0,  0,  0, -5},
+        {-5,  0,  0,  0,  0,  0,  0, -5},
+        {-5,  0,  0,  0,  0,  0,  0, -5},
+        {-5,  0,  0,  0,  0,  0,  0, -5},
+        { 0,  0,  0,  5,  5,  0,  0,  0}};
+        
+        static int[,] knightBoard={
+        {-50,-40,-30,-30,-30,-30,-40,-50},
+        {-40,-20,  0,  0,  0,  0,-20,-40},
+        {-30,  0, 10, 15, 15, 10,  0,-30},
+        {-30,  5, 15, 20, 20, 15,  5,-30},
+        {-30,  0, 15, 20, 20, 15,  0,-30},
+        {-30,  5, 10, 15, 15, 10,  5,-30},
+        {-40,-20,  0,  5,  5,  0,-20,-40},
+        {-50,-40,-30,-30,-30,-30,-40,-50}};
+        
+        static int[,] bishopBoard={
+        {-20,-10,-10,-10,-10,-10,-10,-20},
+        {-10,  0,  0,  0,  0,  0,  0,-10},
+        {-10,  0,  5, 10, 10,  5,  0,-10},
+        {-10,  5,  5, 10, 10,  5,  5,-10},
+        {-10,  0, 10, 10, 10, 10,  0,-10},
+        {-10, 10, 10, 10, 10, 10, 10,-10},
+        {-10,  5,  0,  0,  0,  0,  5,-10},
+        {-20,-10,-10,-10,-10,-10,-10,-20}};
+        
+        static int[,] queenBoard={
+        {-20,-10,-10, -5, -5,-10,-10,-20},
+        {-10,  0,  0,  0,  0,  0,  0,-10},
+        {-10,  0,  5,  5,  5,  5,  0,-10},
+        { -5,  0,  5,  5,  5,  5,  0, -5},
+        {  0,  0,  5,  5,  5,  5,  0, -5},
+        {-10,  5,  5,  5,  5,  5,  0,-10},
+        {-10,  0,  5,  0,  0,  0,  0,-10},
+        {-20,-10,-10, -5, -5,-10,-10,-20}};
+        
+        static int[,] kingMidBoard={
+        {-30,-40,-40,-50,-50,-40,-40,-30},
+        {-30,-40,-40,-50,-50,-40,-40,-30},
+        {-30,-40,-40,-50,-50,-40,-40,-30},
+        {-30,-40,-40,-50,-50,-40,-40,-30},
+        {-20,-30,-30,-40,-40,-30,-30,-20},
+        {-10,-20,-20,-20,-20,-20,-20,-10},
+        { 20, 20,  0,  0,  0,  0, 20, 20},
+        { 20, 30, 10,  0,  0, 10, 30, 20}};
+        
+        static int[,] kingEndBoard={
+        {-50,-40,-30,-20,-20,-30,-40,-50},
+        {-30,-20,-10,  0,  0,-10,-20,-30},
+        {-30,-10, 20, 30, 30, 20,-10,-30},
+        {-30,-10, 30, 40, 40, 30,-10,-30},
+        {-30,-10, 30, 40, 40, 30,-10,-30},
+        {-30,-10, 20, 30, 30, 20,-10,-30},
+        {-30,-30,  0,  0,  0,  0,-30,-30},
+        {-50,-30,-30,-30,-30,-30,-30,-50}};
         
         static int kingPositionU;
         public static void Main(string[] args)
@@ -48,6 +118,15 @@ namespace Chess
                         case "Q":
                             list += possibleQ(i);
                             break;
+                        case "R":
+                            list += possibleR(i);
+                            break;
+                        case "K":
+                            list += possibleK(i);
+                            break;
+						case "P":
+							list += possibleP(i);
+							break;
                     }
 
                 }
@@ -89,10 +168,95 @@ namespace Chess
         }
         public static String possibleB(int i)
         {
-            String list = "";
+			String list = "", oldPiece;
+			int row = i / 8, col = i % 8;
+			int distance = 1;
+            for (int j = -1; j <= 1; j+=2)
+            {
+                for (int k = -1; k <= 1; k+=2)
+                {
+                    try{
+						while (" ".Equals(chessBoard[row + distance * j, col + distance * k]))
+						{
+							oldPiece = chessBoard[row + distance * j, col + distance * k];
+							chessBoard[row, col] = " ";
+							chessBoard[row + distance * j, col + distance * k] = "B";
+							if (safeKing())
+							{
+								list = list + row.ToString() + col.ToString() + (row + distance * j).ToString() + (col + distance * k).ToString() + oldPiece;
+							}
+							chessBoard[row, col] = "B";
+							chessBoard[row + distance * j, col + distance * k] = oldPiece;
+							distance++;
+						}
+
+						if (Char.IsLower(chessBoard[row + distance * j, col + distance * k], 0))
+						{
+							oldPiece = chessBoard[row + distance * j, col + distance * k];
+							chessBoard[row, col] = " ";
+							chessBoard[row + distance * j, col + distance * k] = "B";
+							if (safeKing())
+							{
+								list = list + row.ToString() + col.ToString() + (row + distance * j).ToString() + (col + distance * k).ToString() + oldPiece;
+							}
+							chessBoard[row, col] = "B";
+							chessBoard[row + distance * j, col + distance * k] = oldPiece;
+						}
+                    } catch(Exception){}
+                    distance = 1;
+                }
+            }
             return list;
         }
 
+        public static String possibleR(int i)
+        {
+			String list = "", oldPiece;
+			int row = i / 8, col = i % 8;
+            int distance = 1;
+            for (int j = -1; j <= 1; j++)
+            {
+                for (int k = -1; k <= 1; k++)
+                {
+                    if (k * j == 0){
+                        if (k != j){
+							try
+							{
+								while (" ".Equals(chessBoard[row + distance * j, col + distance * k]))
+								{
+									oldPiece = " ";
+									chessBoard[row, col] = " ";
+									chessBoard[row + distance * j, col + distance * k] = "R";
+									if (safeKing())
+									{
+										list = list + row.ToString() + col.ToString() + (row + distance * j).ToString() + (col + distance * k).ToString() + oldPiece;
+									}
+									chessBoard[row, col] = "R";
+									chessBoard[row + distance * j, col + distance * k] = oldPiece;
+									distance++;
+								}
+
+								if (Char.IsLower(chessBoard[row + distance * j, col + distance * k], 0))
+								{
+									oldPiece = chessBoard[row + distance * j, col + distance * k];
+									chessBoard[row, col] = " ";
+									chessBoard[row + distance * j, col + distance * k] = "R";
+									if (safeKing())
+									{
+										list = list + row.ToString() + col.ToString() + (row + distance * j).ToString() + (col + distance * k).ToString() + oldPiece;
+									}
+									chessBoard[row, col] = "R";
+									chessBoard[row + distance * j, col + distance * k] = oldPiece;
+								}
+							}
+							catch (Exception) { }
+							distance = 1;
+                        }
+                    }
+                }
+            }
+			return list;
+		}
         public static String possibleQ(int i)
         {
             String list = "", oldPiece;
@@ -140,8 +304,45 @@ namespace Chess
             }
             return list;
         }
+
+        public static String possibleK(int i)
+        {
+            String list = "", oldPiece;
+            int row = i / 8, col = i % 8;
+            for (int j = -2; j <= 2; j++)
+            {
+                for (int k = -2; k <= 2; k++){
+                    if ( Math.Abs(j * k) == 2){
+                        try 
+                        {
+                            if (Char.IsLower(chessBoard[row + j, col + k], 0) || " ".Equals(chessBoard[row + j, col + k]))
+							{
+								oldPiece = chessBoard[row + j, col + k];
+								chessBoard[row, col] = " ";
+								chessBoard[row + j, col + k] = "K";
+								if (safeKing())
+								{
+									list = list + row.ToString() + col.ToString() + (row + j).ToString() + (col + k).ToString() + oldPiece;
+								}
+								chessBoard[row, col] = "K";
+								chessBoard[row + j, col + k] = oldPiece;
+							}
+                        }catch (Exception){}
+                    }
+                }
+            }
+            return list;
+        }
+
+        public static String possibleP(int i)
+        {
+            String list = "", oldPiece;
+            int row = i / 8, col = i % 8;
+
+            return list;
+        }
         //Don't work with
-        static Boolean safeKing()
+        public static Boolean safeKing()
         {
             return true;
         }
