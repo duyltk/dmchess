@@ -11,7 +11,7 @@ namespace Chess
         static String[,] chessBoard={
         {"r","k","b","q","a","b","k","r"},
         {"p","p","p","p","p","p","p","p"},
-        {" "," ","K"," "," "," "," "," "},
+        {" "," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
@@ -96,7 +96,7 @@ namespace Chess
             while(!"A".Equals(chessBoard[kingPositionU/8,kingPositionU%8])){
                 kingPositionU++;
             }
-			System.Console.WriteLine(possibleMove());
+            System.Console.WriteLine(safeKing());
 
 
 		}
@@ -218,8 +218,7 @@ namespace Chess
             {
                 for (int k = -1; k <= 1; k++)
                 {
-                    if (k * j == 0){
-                        if (k != j){
+                    if (k * j == 0 && j != k){
 							try
 							{
 								while (" ".Equals(chessBoard[row + distance * j, col + distance * k]))
@@ -251,8 +250,7 @@ namespace Chess
 							}
 							catch (Exception) { }
 							distance = 1;
-                        }
-                    }
+                     }
                 }
             }
 			return list;
@@ -344,6 +342,98 @@ namespace Chess
         //Don't work with
         public static Boolean safeKing()
         {
+            int distance = 1;
+            //Bishop & Queen diagonal
+            for (int i = -1; i <= 1; i+=2)
+            {
+                for (int j = -1; j <= 1; j+=2)
+                {
+                    try
+                    {
+                        while (" ".Equals(chessBoard[kingPositionU / 8 + distance * i, kingPositionU % 8 + distance * j]))
+                        {
+                            distance++;
+                        }
+                        if ("b".Equals(chessBoard[kingPositionU / 8 + distance * i, kingPositionU % 8 + distance * j]) || "q".Equals(chessBoard[kingPositionU / 8 + distance * i, kingPositionU % 8 + distance * j]))
+                        {
+                            return false;
+                        }
+                    }catch(Exception){}
+					distance = 1;
+				}
+            }
+
+			// Rock and Queen go strait
+			for (int i = -1; i <= 1; i++)
+			{
+				for (int j = -1; j <= 1; j++)
+				{
+                    if (i*j == 0 && i != j)
+					try
+					{
+						while (" ".Equals(chessBoard[kingPositionU / 8 + distance * i, kingPositionU % 8 + distance * j]))
+						{
+							distance++;
+						}
+						if ("r".Equals(chessBoard[kingPositionU / 8 + distance * i, kingPositionU % 8 + distance * j]) || "q".Equals(chessBoard[kingPositionU / 8 + distance * i, kingPositionU % 8 + distance * j]))
+						{
+							return false;
+						}
+					}
+					catch (Exception) { }
+					distance = 1;
+				}
+			}
+
+            //Knight
+            for (int i = -2; i <= 2; i++)
+            {
+                for (int j = -2; j <= 2; j++)
+                {
+                    if (Math.Abs(i * j) == 2)
+                    {
+                        try 
+                        {
+							if ("k".Equals(chessBoard[kingPositionU / 8 + i, kingPositionU % 8 + j]))
+							{
+								return false;
+							}
+                        }catch(Exception){}
+                    }
+                }
+            }
+            //Pawn
+            if (kingPositionU > 15)
+            {
+                for (int i = -1; i <= 1; i+=2)
+                {
+                    try
+                    {
+                        if ("p".Equals(chessBoard[kingPositionU / 8 - 1, kingPositionU % 8 + i]))
+                        {
+                            return false;
+                        }
+                    }catch(Exception){}
+                }
+            }
+
+            //King
+            for (int i = -1; i <= 1;i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    try
+                    {
+                        if (i != 0 || j != 0)
+                        {
+							if ("a".Equals(chessBoard[kingPositionU + i, kingPositionU % 8 + j]))
+							{
+								return false;
+							}
+                        }
+                    }catch(Exception){}
+                }
+            }
             return true;
         }
     }
