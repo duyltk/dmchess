@@ -8,7 +8,7 @@ namespace Chess
 {
     class Program
     {
-        static string[,] chessBoard={
+        static String[,] chessBoard={
         {"r","k","b","q","a","b","k","r"},
         {"p","p","p","p","p","p","p","p"},
         {" "," "," "," "," "," "," "," "},
@@ -21,18 +21,21 @@ namespace Chess
         static int kingPositionU;
         public static void Main(string[] args)
         {
-            kingPositionU = 0;
+
+			kingPositionU = 0;
             while(!"A".Equals(chessBoard[kingPositionU/8,kingPositionU%8])){
                 kingPositionU++;
             }
-        }
-        public static string possibleMove()
-        {
-            string list = "";
+			System.Console.WriteLine(possibleMove());
 
+
+		}
+        public static String possibleMove()
+        {
+            String list = "";
             for (int i = 0; i < 64; i++)
             {
-                if (Char.IsUpper(chessBoard[i / 8, i % 8], 1))
+                if (Char.IsUpper(chessBoard[i / 8, i % 8], 0))
                 {
                     switch (chessBoard[i / 8, i % 8])
                     {
@@ -51,9 +54,9 @@ namespace Chess
             }
             return list;
         }
-        public static string possibleA(int i)
+        public static String possibleA(int i)
         {
-            string list = "", oldPiece;
+            String list = "", oldPiece;
             int row = i / 8, col = i % 8;
             for (int j = 0; j < 9; j++)
             {
@@ -62,7 +65,7 @@ namespace Chess
                 {
                     try
                     {//Check position around of the king is enemy or blank
-                        if (Char.IsLower(chessBoard[row - 1 + j / 3, col - 1 + j % 3], 1) || " ".Equals(chessBoard[row - 1 + j / 3, col - 1 + j % 3]))
+                        if (Char.IsLower(chessBoard[row - 1 + j / 3, col - 1 + j % 3], 0) || " ".Equals(chessBoard[row - 1 + j / 3, col - 1 + j % 3]))
                         {
                             oldPiece = chessBoard[row - 1 + j / 3, col - 1 + j % 3];
                             chessBoard[row, col] = " ";
@@ -72,27 +75,27 @@ namespace Chess
                             if (safeKing())
                             {
                                 //Old Position [ROW, COL] => New Position [..., ...], where is OldPiece
-                                list = list + row + col + (row - 1 + j / 3) + (col - 1 + j % 3) + oldPiece;
+                                list = list + row.ToString() + col.ToString() + (row - 1 + j / 3).ToString() + (col - 1 + j % 3).ToString() + oldPiece;
                             }
                             chessBoard[row, col] = "A";
                             chessBoard[row - 1 + j / 3, col - 1 + j % 3] = oldPiece;
                             kingPositionU = tempKing;
                         }
                     }
-                    catch (Exception e) { }
+                    catch (Exception) { }
                 }
             }
             return list;
         }
-        public static string possibleB(int i)
+        public static String possibleB(int i)
         {
-            string list = "";
+            String list = "";
             return list;
         }
 
-        public static string possibleQ(int i)
+        public static String possibleQ(int i)
         {
-            string list = "", oldPiece;
+            String list = "", oldPiece;
             int row = i / 8, col = i % 8;
             int distance = 1;
             for (int j = -1; j <= 1; j++)
@@ -110,27 +113,27 @@ namespace Chess
                                 chessBoard[row + distance * j, col + distance * k] = "Q";
                                 if (safeKing())
                                 {
-                                    list = list + row + col + (row + distance * j) + (col + distance * k) + oldPiece;
+                                    list = list + row.ToString() + col.ToString() + (row + distance * j).ToString() + (col + distance * k).ToString() + oldPiece;
                                 }
                                 chessBoard[row, col] = "Q";
                                 chessBoard[row + distance * j, col + distance * k] = oldPiece;
                                 distance++;
                             }
 
-                            if (Char.IsLower(chessBoard[row + distance * j, col + distance * k], 1))
+                            if (Char.IsLower(chessBoard[row + distance * j, col + distance * k], 0))
                             {
                                 oldPiece = " ";
                                 chessBoard[row, col] = " ";
                                 chessBoard[row + distance * j, col + distance * k] = "Q";
                                 if (safeKing())
                                 {
-                                    list = list + row + col + (row + distance * j) + (col + distance * k) + oldPiece;
+                                    list = list + row.ToString() + col.ToString() + (row + distance * j).ToString() + (col + distance * k).ToString() + oldPiece;
                                 }
                                 chessBoard[row, col] = "Q";
                                 chessBoard[row + distance * j, col + distance * k] = oldPiece;
                             }
                         }
-                        catch (Exception e) { }
+                        catch (Exception) { }
                         distance = 1;
                     }
                 }
@@ -140,7 +143,6 @@ namespace Chess
         //Don't work with
         static Boolean safeKing()
         {
-
             return true;
         }
     }
