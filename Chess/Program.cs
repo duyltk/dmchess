@@ -96,7 +96,7 @@ namespace Chess
             while(!"A".Equals(chessBoard[kingPositionU/8,kingPositionU%8])){
                 kingPositionU++;
             }
-            System.Console.WriteLine(safeKing());
+            System.Console.WriteLine(possibleMove());
 
 
 		}
@@ -124,9 +124,9 @@ namespace Chess
                         case "K":
                             list += possibleK(i);
                             break;
-						case "P":
-							list += possibleP(i);
-							break;
+						//case "P":
+							//list += possibleP(i);
+							//break;
                     }
 
                 }
@@ -336,7 +336,43 @@ namespace Chess
         {
             String list = "", oldPiece;
             int row = i / 8, col = i % 8;
+            for (int j = -1; j <= 1; j+=2)
+            {
+                try
+                {
+                    if (Char.IsLower(chessBoard[row - 1, col + j], 0) && i >= 16)
+                    {
+                        oldPiece = chessBoard[row - 1, col + j];
+                        chessBoard[row, col] = " ";
+                        chessBoard[row - 1, col + j] = "P";
+                        if (safeKing())
+                        {
+                            list = list + row.ToString() + col.ToString() + (row - 1).ToString() + (col + j).ToString() + oldPiece;
+                        }
+                        chessBoard[row, col] = "P";
+                        chessBoard[row - 1, col + j] = oldPiece;
+                    }
 
+                }catch(Exception){}
+
+                try
+                {
+                    if (Char.IsLower(chessBoard[row - 1, col + j], 0) && i < 16)
+                    {
+                        String[] temp = { "Q", "R", "B", "K" };
+                        for (int k = 0; k <= 4; k++)
+                        {
+                            oldPiece = chessBoard[row - 1, col + j];
+                            chessBoard[row, col] = " ";
+                            chessBoard[row - 1, col + 1] = temp[k];
+                            if (safeKing()){
+                                
+                            }
+                        }
+
+                    }
+                }catch(Exception){}
+            }
             return list;
         }
         //Don't work with
