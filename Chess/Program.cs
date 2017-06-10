@@ -89,17 +89,44 @@ namespace Chess
         {-50,-30,-30,-30,-30,-30,-30,-50}};
         
         static int kingPositionU;
-        public static void Main(string[] args)
+		static int kingPositionL;
+
+		public static void Main(string[] args)
         {
 
 			kingPositionU = 0;
-            while(!"A".Equals(chessBoard[kingPositionU/8,kingPositionU%8])){
+            while(!"A".Equals(chessBoard[kingPositionU / 8, kingPositionU % 8]))
+            {
                 kingPositionU++;
             }
+			while (!"a".Equals(chessBoard[kingPositionU / 8, kingPositionU % 8]))
+			{
+				kingPositionL++;
+			}
             System.Console.WriteLine(possibleMove());
 
 
 		}
+        public static void makeMove(String move)
+        {
+            if (move[4] != 'P' && move[4] != 'C')
+            {
+                chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])] = chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])];
+                chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = " ";
+            }
+            else if (move[4] == 'P')
+            {
+                //If pawm promotion
+                //[0]ColumePrevious, [1]ColumeNext, [2]CapturePiece, [3]PromotionPiece, P
+                chessBoard[1, (int)Char.GetNumericValue(move[0])] = " ";
+                chessBoard[0, (int)Char.GetNumericValue(move[1])] = move[3].ToString();
+            }
+            else
+            {
+                //If castling
+                
+            }
+        }
         public static String possibleMove()
         {
             String list = "";
@@ -124,9 +151,9 @@ namespace Chess
                         case "K":
                             list += possibleK(i);
                             break;
-						//case "P":
-							//list += possibleP(i);
-							//break;
+						case "P":
+							list += possibleP(i);
+							break;
                     }
 
                 }
@@ -284,7 +311,7 @@ namespace Chess
 
                             if (Char.IsLower(chessBoard[row + distance * j, col + distance * k], 0))
                             {
-                                oldPiece = " ";
+                                oldPiece = chessBoard[row + distance * j, col + distance * k];
                                 chessBoard[row, col] = " ";
                                 chessBoard[row + distance * j, col + distance * k] = "Q";
                                 if (safeKing())
