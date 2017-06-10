@@ -133,8 +133,32 @@ namespace Chess
             else
             {
                 //If castling
+                //chessBoard[7, (int)Char.GetNumericValue(move[0])]
                 
             }
+        }
+        public static String coreAI(int depth, int alpha, int beta, String move, int player)
+        {
+            String list = possibleMove();
+            if (depth == 0 || list.Length == 0)
+            {
+                return move;
+            }
+
+            return "";
+        }
+
+        public static int evaluation()
+        {
+            return 0;
+        }
+
+        public static String sortMove(String move)
+        {
+            String newMove = "";
+
+            return newMove;
+
         }
         public static String possibleMove()
         {
@@ -200,6 +224,8 @@ namespace Chess
                     catch (Exception) { }
                 }
             }
+            //Castling. Arrays( kingColume, rockColume, kingNewColume, rockNewColume, C )
+            if ("A".Equals())
             return list;
         }
         public static String possibleB(int i)
