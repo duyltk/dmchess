@@ -97,8 +97,6 @@ namespace Chess
                 kingPositionU++;
             }
             System.Console.WriteLine(possibleMove());
-
-
 		}
         public static String possibleMove()
         {
@@ -124,9 +122,9 @@ namespace Chess
                         case "K":
                             list += possibleK(i);
                             break;
-						//case "P":
-							//list += possibleP(i);
-							//break;
+						case "P":
+							list += possibleP(i);
+							break;
                     }
 
                 }
@@ -338,7 +336,7 @@ namespace Chess
             int row = i / 8, col = i % 8;
             for (int j = -1; j <= 1; j+=2)
             {
-                try
+                try // capture
                 {
                     if (Char.IsLower(chessBoard[row - 1, col + j], 0) && i >= 16)
                     {
@@ -355,7 +353,7 @@ namespace Chess
 
                 }catch(Exception){}
 
-                try
+                try // promotion and capture
                 {
                     if (Char.IsLower(chessBoard[row - 1, col + j], 0) && i < 16)
                     {
@@ -364,15 +362,72 @@ namespace Chess
                         {
                             oldPiece = chessBoard[row - 1, col + j];
                             chessBoard[row, col] = " ";
-                            chessBoard[row - 1, col + 1] = temp[k];
+                            chessBoard[row - 1, col + j] = temp[k];
                             if (safeKing()){
-                                
+                                list = list + col.ToString() + (col + j).ToString() + oldPiece + temp[k] + "P";
                             }
+                            chessBoard[row, col] = "P";
+                            chessBoard[row - 1, col + j] = oldPiece;
                         }
 
                     }
                 }catch(Exception){}
             }
+            try // tien 1 buoc
+            {
+                if (" ".Equals(chessBoard[row - 1, col]) && i >= 16)
+                {
+                    oldPiece = chessBoard[row - 1, col];
+                    chessBoard[row, col] = " ";
+                    chessBoard[row - 1, col] = "P";
+                    if (safeKing())
+                    {
+                        list = list + row.ToString() + col.ToString() + (row - 1).ToString() + col.ToString() + oldPiece;
+                    }
+                    chessBoard[row, col] = "P";
+                    chessBoard[row - 1, col] = oldPiece;
+                }
+            }
+            catch (Exception) { }
+
+            try // tien 2 buoc
+            {
+                if (" ".Equals(chessBoard[row - 2, col]) && i >= 16)
+                {
+                    oldPiece = chessBoard[row - 2, col];
+                    chessBoard[row, col] = " ";
+                    chessBoard[row - 2, col] = "P";
+                    if (safeKing())
+                    {
+                        list = list + row.ToString() + col.ToString() + (row - 2).ToString() + col.ToString() + oldPiece;
+                    }
+                    chessBoard[row, col] = "P";
+                    chessBoard[row - 2, col] = oldPiece;
+                }
+            }
+            catch (Exception) { }
+
+            try // tien 1 buoc va phong tot (promotion)
+            {
+
+                if (" ".Equals(chessBoard[row - 1, col]) && i < 16)
+                {
+                    String[] temp = { "Q", "R", "B", "K" };
+                    for (int k = 0; k < 4; k++)
+                    {
+                        oldPiece = chessBoard[row - 1, col];
+                        chessBoard[row, col] = " ";
+                        chessBoard[row - 1, col] = temp[k];
+                        if (safeKing())
+                        {
+                            list = list + col.ToString() + col.ToString() + oldPiece + temp[k] + "P";
+                        }
+                        chessBoard[row, col] = "P";
+                        chessBoard[row - 1, col] = oldPiece;
+                    }
+                }
+            }
+            catch (Exception) { }
             return list;
         }
         //Don't work with
