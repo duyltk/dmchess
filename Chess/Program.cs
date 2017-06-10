@@ -99,11 +99,19 @@ namespace Chess
             {
                 kingPositionU++;
             }
-			while (!"a".Equals(chessBoard[kingPositionU / 8, kingPositionU % 8]))
+            kingPositionL = 0;
+			while (!"a".Equals(chessBoard[kingPositionL / 8, kingPositionL % 8]))
 			{
 				kingPositionL++;
 			}
-            System.Console.WriteLine(possibleMove());
+   //         for (int i = 0; i < 8; i++)
+   //         {
+   //             for (int j = 0; j < 8; j++){
+   //                 System.Console.Write(chessBoard[i, j] + ";");
+   //             }
+   //             System.Console.WriteLine();
+			//}
+            //System.Console.WriteLine(possibleMove());
 
 
 		}
