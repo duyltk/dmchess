@@ -89,15 +89,53 @@ namespace Chess
         {-50,-30,-30,-30,-30,-30,-30,-50}};
         
         static int kingPositionU;
-        public static void Main(string[] args)
+		static int kingPositionL;
+
+		public static void Main(string[] args)
         {
 
 			kingPositionU = 0;
-            while(!"A".Equals(chessBoard[kingPositionU/8,kingPositionU%8])){
+            while(!"A".Equals(chessBoard[kingPositionU / 8, kingPositionU % 8]))
+            {
                 kingPositionU++;
-            }
-            System.Console.WriteLine(possibleMove());
+            }     
+            kingPositionL = 0;
+			while (!"a".Equals(chessBoard[kingPositionL / 8, kingPositionL % 8]))
+			{
+				kingPositionL++;
+			}
+   //         for (int i = 0; i < 8; i++)
+   //         {
+   //             for (int j = 0; j < 8; j++){
+   //                 System.Console.Write(chessBoard[i, j] + ";");
+   //             }
+   //             System.Console.WriteLine();
+			//}
+            //System.Console.WriteLine(possibleMove());
+
+
+
 		}
+        public static void makeMove(String move)
+        {
+            if (move[4] != 'P' && move[4] != 'C')
+            {
+                chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])] = chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])];
+                chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = " ";
+            }
+            else if (move[4] == 'P')
+            {
+                //If pawm promotion
+                //[0]ColumePrevious, [1]ColumeNext, [2]CapturePiece, [3]PromotionPiece, P
+                chessBoard[1, (int)Char.GetNumericValue(move[0])] = " ";
+                chessBoard[0, (int)Char.GetNumericValue(move[1])] = move[3].ToString();
+            }
+            else
+            {
+                //If castling
+                
+            }
+        }
         public static String possibleMove()
         {
             String list = "";
@@ -282,7 +320,7 @@ namespace Chess
 
                             if (Char.IsLower(chessBoard[row + distance * j, col + distance * k], 0))
                             {
-                                oldPiece = " ";
+                                oldPiece = chessBoard[row + distance * j, col + distance * k];
                                 chessBoard[row, col] = " ";
                                 chessBoard[row + distance * j, col + distance * k] = "Q";
                                 if (safeKing())
@@ -373,7 +411,7 @@ namespace Chess
                     }
                 }catch(Exception){}
             }
-            try // tien 1 buoc
+            try // go straight one distance
             {
                 if (" ".Equals(chessBoard[row - 1, col]) && i >= 16)
                 {
@@ -390,9 +428,9 @@ namespace Chess
             }
             catch (Exception) { }
 
-            try // tien 2 buoc
+            try // go straight two distance
             {
-                if (" ".Equals(chessBoard[row - 2, col]) && i >= 16)
+                if (" ".Equals(chessBoard[row - 2, col]) && i >= 48)
                 {
                     oldPiece = chessBoard[row - 2, col];
                     chessBoard[row, col] = " ";
