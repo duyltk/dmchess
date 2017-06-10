@@ -104,17 +104,17 @@ namespace Chess
 			{
 				kingPositionL++;
 			}
-   //         for (int i = 0; i < 8; i++)
-   //         {
-   //             for (int j = 0; j < 8; j++){
-   //                 System.Console.Write(chessBoard[i, j] + ";");
-   //             }
-   //             System.Console.WriteLine();
-			//}
-            //System.Console.WriteLine(possibleMove());
-
-
-
+            makeMove("7150 ");
+            undoMove("7150 ");
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++){
+                    System.Console.Write(chessBoard[i, j] + ";");
+                }
+                System.Console.WriteLine();
+			}
+            
+            System.Console.WriteLine(possibleMove());
 		}
         public static void makeMove(String move)
         {
@@ -134,6 +134,26 @@ namespace Chess
             {
                 //If castling
                 
+            }
+        }
+        public static void undoMove(String move)
+        {
+            if (move[4] != 'P' && move[4] != 'C')
+            {
+                chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])];
+                chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])] = move[4].ToString();
+            }
+            else if (move[4] == 'P')
+            {
+                //If pawm promotion
+                //[0]ColumePrevious, [1]ColumeNext, [2]CapturePiece, [3]PromotionPiece, P
+                chessBoard[1, (int)Char.GetNumericValue(move[0])] = "P";
+                chessBoard[0, (int)Char.GetNumericValue(move[1])] = move[2].ToString();
+            }
+            else
+            {
+                //If castling
+
             }
         }
         public static String possibleMove()
