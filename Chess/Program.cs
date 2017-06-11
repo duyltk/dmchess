@@ -9,13 +9,13 @@ namespace Chess
     class Program
     {
         static String[,] chessBoard={
-        {"r","k","b","q","a","b","k","r"},
+        {"r"," ","b","q","a","b","k","r"},
         {"p","p","p","p","p","p","p","p"},
+        {"k"," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
+        {" "," "," ","P"," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
-        {" "," "," "," "," "," "," "," "},
-        {" "," "," "," "," "," "," "," "},
-        {"P","P","P","P","P","P","P","P"},
+        {"P","P","P"," ","P","P","P","P"},
         {"R","K","B","Q","A","B","K","R"}};
 
 		static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
@@ -104,18 +104,74 @@ namespace Chess
 			{
 				kingPositionL++;
 			}
-   //         for (int i = 0; i < 8; i++)
-   //         {
-   //             for (int j = 0; j < 8; j++){
-   //                 System.Console.Write(chessBoard[i, j] + ";");
-   //             }
-   //             System.Console.WriteLine();
-			//}
-            //System.Console.WriteLine(possibleMove());
-
-
-
-		}
+            //makeMove("7150 ");
+            //undoMove("7150 ");
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++){
+                    System.Console.Write(chessBoard[i, j] + ";");
+                }
+                System.Console.WriteLine();
+            }
+            //flipboard();
+            //for (int i = 0; i < 8; i++)
+            //{
+            //    for (int j = 0; j < 8; j++)
+            //    {
+            //        System.Console.Write(chessBoard[i, j] + ";");
+            //    }
+            //    System.Console.WriteLine();
+            //}
+            System.Console.WriteLine(possibleMove());
+            System.Console.WriteLine(alphaBeta(4, int.MinValue, int.MaxValue, "", 1));
+        }
+        public static String alphaBeta(int depth, int alpha, int beta, String move, int player)
+        {
+            //1234b
+            //String list = possibleMove();
+            String list = "1";
+            if (depth == 0 || list.Length == 0) return move + rating();
+            list = "";
+            Console.Write("How many node: ");
+            int temp = 0;
+            temp = int.Parse(Console.ReadLine());
+            for(int i = 0; i < temp; i++)
+            {
+                list = list + "1111b";
+            }
+            if (player == 1) // Computer's turn
+            {
+                for (int i = 0; i < list.Length; i += 5)
+                {
+                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 0);                    
+                    int value = int.Parse(resultString.Substring(5));
+                    if (alpha < value)
+                        alpha = value;
+                    if (alpha >= beta) break;
+                }
+                return move + alpha;
+            }
+            else // Human's turn
+            {
+                for (int i = 0; i < list.Length; i += 5)
+                {
+                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1);
+                    int value = int.Parse(resultString.Substring(5));
+                    if (beta > value)
+                        beta = value;
+                    if (alpha >= beta) break;
+                }
+                return move + beta;
+            }
+            
+        }
+        public static int rating()
+        {
+            
+            Console.Write("What is the score: ");
+            int score = int.Parse(Console.ReadLine());
+            return score;
+        }
         public static void makeMove(String move)
         {
             if (move[4] != 'P' && move[4] != 'C')
@@ -135,6 +191,55 @@ namespace Chess
                 //If castling
                 
             }
+        }
+        public static void undoMove(String move)
+        {
+            if (move[4] != 'P' && move[4] != 'C')
+            {
+                chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])];
+                chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])] = move[4].ToString();
+            }
+            else if (move[4] == 'P')
+            {
+                //If pawm promotion
+                //[0]ColumePrevious, [1]ColumeNext, [2]CapturePiece, [3]PromotionPiece, P
+                chessBoard[1, (int)Char.GetNumericValue(move[0])] = "P";
+                chessBoard[0, (int)Char.GetNumericValue(move[1])] = move[2].ToString();
+            }
+            else
+            {
+                //If castling
+
+            }
+        }
+        public static void flipboard()
+        {
+            String temp;
+            for(int i = 0; i < 32; i++)
+            {
+                int row = i / 8, col = i % 8;
+                if (Char.IsUpper(chessBoard[row,col],0))
+                {
+                    temp = chessBoard[row, col].ToLower();
+                }
+                else
+                {
+                    temp = chessBoard[row, col].ToUpper();
+                }
+                if (Char.IsUpper(chessBoard[7 - row, 7 - col], 0))
+                {
+                    chessBoard[row , col] = chessBoard[7 - row, 7 - col].ToLower();
+                }
+                else
+                {
+                    chessBoard[row, col] = chessBoard[7 - row, 7 - col].ToUpper();
+                }
+                chessBoard[7 - row, 7 - col] = temp;
+            }
+            int temp1 = kingPositionU;
+            kingPositionU = 63 - kingPositionL;
+            kingPositionL = 63 - temp1;
+
         }
         public static String possibleMove()
         {
