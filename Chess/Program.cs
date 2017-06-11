@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,16 +19,16 @@ namespace Chess
 		{"R","K","B","Q","A","B","K","R"}
         };
         
-		static String[,] chessBoard3={
-		{"r","k","b","q","a","b","k","r"},
-		{"p","p","p","p","p","p","p","p"},
+		static String[,] chessBoard={
+		{" "," ","a"," "," "," "," "," "},
+		{" "," "," "," ","p"," "," "," "},
 		{" "," "," "," "," "," "," "," "},
 		{" "," "," "," "," "," "," "," "},
 		{" "," "," "," "," "," "," "," "},
 		{" "," "," "," "," "," "," "," "},
-		{"P","P","P","P","P","P","P","P"},
-		{"R","K","B","Q","A","B","K","R"}
-        };
+		{" "," "," ","P"," "," "," "," "},
+		{" "," "," ","A"," "," "," "," "},
+		};
 
 
 		static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
@@ -121,11 +121,13 @@ namespace Chess
 			{
 				kingPositionL++;
 			}
-            drawChessBoard();
-            makeMove(alphaBeta(1, int.MinValue, int.MaxValue, "", 1).Substring(0, 5));
-            //flipboard();
-            drawChessBoard();
-        }
+
+			drawChessBoard();
+			System.Console.WriteLine(possibleMove());
+            System.Console.Write(alphaBeta(4, int.MinValue, int.MaxValue, "", 1));
+
+			//flipboard();
+		}
         public static void drawChessBoard()
         {
             for (int i = 0; i < 8; i++)
@@ -141,49 +143,48 @@ namespace Chess
         {
             String list = possibleMove();
             
-            if (depth == 0 || list.Length == 0) return move + rating();
+            if (depth == 0 || list.Length == 0) return move + rating().ToString();
 
-            if (player == 1) // Computer's turn
+            for (int i = 0; i < list.Length; i += 5)
             {
-                String BestMove = "";
-                for (int i = 0; i < list.Length; i += 5)
+                makeMove(list.Substring(i, 5));
+                flipboard();
+
+                player = player - 1;
+                String moveEval = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), player);
+                int Eval = int.Parse(moveEval.Substring(5));
+
+                flipboard();
+                undoMove(list.Substring(i, 5));
+
+                if (player != 1) //Computer turn
                 {
-                    makeMove(list.Substring(i, 5));
-                    flipboard();
-                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 0);
-                    flipboard();
-                    undoMove(list.Substring(i,5));                  
-                    int value = int.Parse(resultString.Substring(5));
-                    if (alpha < value)
+                    if (alpha < Eval)
                     {
-                        alpha = value;
-                        BestMove = resultString;
+                        alpha = Eval;
                     }
-                    if (alpha >= beta) break;
+                    if (depth == 4){
+                        move = list.Substring(i, 5);
+                    }
+                        
                 }
-                return BestMove;
+                else
+                {
+                    if (beta >= Eval){
+                        beta = Eval;
+                    }
+                }
+
+                if (alpha >= beta){
+                    break;
+                }
             }
-            else // Human's turn
+            if (player != 1)
             {
-                String BestMove = "";
-                for (int i = 0; i < list.Length; i += 5)
-                {
-                    makeMove(list.Substring(i, 5));
-                    flipboard();
-                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1);
-                    flipboard();
-                    undoMove(list.Substring(i, 5));
-                    int value = int.Parse(resultString.Substring(5));
-                    if (beta > value)
-                    {
-                        beta = value;
-                        BestMove = resultString;
-                    }
-                    if (alpha >= beta) break;
-                }
-                return BestMove;
+                return ( move + alpha ) ;
             }
-            
+            else return ( move + beta );
+
         }
         public static int rating()
         {
