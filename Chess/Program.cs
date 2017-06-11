@@ -373,7 +373,7 @@ namespace Chess
 				}
 			}
 			//Castling Lower Long
-            if (castlingLLong && safeKing() && " ".Equals(chessBoard[7, 4]) && " ".Equals(chessBoard[7, 5]) && " ".Equals(chessBoard[7, 6]))
+            if ("A".Equals(chessBoard[7, 3]) && "R".Equals(chessBoard[7, 7]) && castlingLLong && safeKing() && " ".Equals(chessBoard[7, 4]) && " ".Equals(chessBoard[7, 5]) && " ".Equals(chessBoard[7, 6]))
 			{
 				bool flag = true;
 				for (int j = 4; j <= 6; j++)
@@ -394,7 +394,7 @@ namespace Chess
 				}
 			}
 			//Castling Lower Short
-			if (castlingLShort && safeKing() && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 2]))
+			if ("A".Equals(chessBoard[7, 3]) && "R".Equals(chessBoard[7, 0]) && castlingLShort && safeKing() && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 2]))
 			{
 				bool flag = true;
 				for (int j = 1; j <= 2; j++)
