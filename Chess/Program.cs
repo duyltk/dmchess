@@ -113,16 +113,64 @@ namespace Chess
                 }
                 System.Console.WriteLine();
             }
-            flipboard();
-            for (int i = 0; i < 8; i++)
+            //flipboard();
+            //for (int i = 0; i < 8; i++)
+            //{
+            //    for (int j = 0; j < 8; j++)
+            //    {
+            //        System.Console.Write(chessBoard[i, j] + ";");
+            //    }
+            //    System.Console.WriteLine();
+            //}
+            System.Console.WriteLine(possibleMove());
+            System.Console.WriteLine(alphaBeta(4, int.MinValue, int.MaxValue, "", 1));
+        }
+        public static String alphaBeta(int depth, int alpha, int beta, String move, int player)
+        {
+            //1234b
+            //String list = possibleMove();
+            String list = "1";
+            if (depth == 0 || list.Length == 0) return move + rating();
+            list = "";
+            Console.Write("How many node: ");
+            int temp = 0;
+            temp = int.Parse(Console.ReadLine());
+            for(int i = 0; i < temp; i++)
             {
-                for (int j = 0; j < 8; j++)
-                {
-                    System.Console.Write(chessBoard[i, j] + ";");
-                }
-                System.Console.WriteLine();
+                list = list + "1111b";
             }
-            //System.Console.WriteLine(possibleMove());
+            if (player == 1) // Computer's turn
+            {
+                for (int i = 0; i < list.Length; i += 5)
+                {
+                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 0);                    
+                    int value = int.Parse(resultString.Substring(5));
+                    if (alpha < value)
+                        alpha = value;
+                    if (alpha >= beta) break;
+                }
+                return move + alpha;
+            }
+            else // Human's turn
+            {
+                for (int i = 0; i < list.Length; i += 5)
+                {
+                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1);
+                    int value = int.Parse(resultString.Substring(5));
+                    if (beta > value)
+                        beta = value;
+                    if (alpha >= beta) break;
+                }
+                return move + beta;
+            }
+            
+        }
+        public static int rating()
+        {
+            
+            Console.Write("What is the score: ");
+            int score = int.Parse(Console.ReadLine());
+            return score;
         }
         public static void makeMove(String move)
         {
