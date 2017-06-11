@@ -8,15 +8,27 @@ namespace Chess
 {
     class Program
     {
-        static String[,] chessBoard={
-        {"r","k","b","q","a","b","k","r"},
-        {"p","p","p","p","p","p","p","p"},
-        {" "," "," "," "," "," "," "," "},
-        {" "," "," "," "," "," "," "," "},
-        {" "," "," "," "," "," "," "," "},
-        {" "," "," "," "," "," "," "," "},
-        {" "," "," ","P","P"," "," "," "},
-        {" "," "," "," ","A"," "," "," "}};
+        static String[,] chessBoard2={
+		{"r","k","b","q","a","b","k","r"},
+		{"p","p","p","p","p","p","p","p"},
+		{" "," "," "," "," "," "," "," "},
+		{" "," "," "," "," "," "," "," "},
+		{" "," "," "," "," "," "," "," "},
+		{" "," "," "," "," "," "," "," "},
+		{"P","P","P","P","P","P","P","P"},
+		{"R","K","B","Q","A","B","K","R"}
+        };
+        
+		static String[,] chessBoard={
+		{"r","k","b","q","a","b","k","r"},
+		{"p","p","p","p","p","p","p","p"},
+		{" "," "," "," "," "," "," "," "},
+		{" "," "," "," "," "," "," "," "},
+		{" "," "," "," "," "," "," "," "},
+		{" "," "," "," "," "," "," "," "},
+		{"P","P","P","P","P","P","P","P"},
+		{"R","K","B","Q","A","B","K","R"}
+        };
 
 		static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
         { 0,  0,  0,  0,  0,  0,  0,  0},
@@ -126,12 +138,10 @@ namespace Chess
         }
         public static String alphaBeta(int depth, int alpha, int beta, String move, int player)
         {
-            //1234b###
             String list = possibleMove();
             
             if (depth == 0 || list.Length == 0) return move + rating();
-            
-            
+
             if (player == 1) // Computer's turn
             {
                 String BestMove = "";
@@ -147,7 +157,7 @@ namespace Chess
                     }
                     if (alpha >= beta) break;
                 }
-                return  BestMove;
+                return BestMove;
             }
             else // Human's turn
             {
