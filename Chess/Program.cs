@@ -15,8 +15,8 @@ namespace Chess
         {" "," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
-        {" "," "," ","P","P"," "," "," "},
-        {" "," "," "," ","A"," "," "," "}};
+        {"P","P","P","P","P","P","P","P"},
+        {"R","K","B","Q","A","B","K","R"}};
 
 		static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
         { 0,  0,  0,  0,  0,  0,  0,  0},
@@ -137,8 +137,11 @@ namespace Chess
                 String BestMove = "";
                 for (int i = 0; i < list.Length; i += 5)
                 {
-                    
-                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 0);                    
+                    makeMove(list.Substring(i, 5));
+                    flipboard();
+                    String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 0);
+                    flipboard();
+                    undoMove(list.Substring(i,5));                  
                     int value = int.Parse(resultString.Substring(5));
                     if (alpha < value)
                     {
@@ -154,7 +157,11 @@ namespace Chess
                 String BestMove = "";
                 for (int i = 0; i < list.Length; i += 5)
                 {
+                    makeMove(list.Substring(i, 5));
+                    flipboard();
                     String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1);
+                    flipboard();
+                    undoMove(list.Substring(i, 5));
                     int value = int.Parse(resultString.Substring(5));
                     if (beta > value)
                     {
