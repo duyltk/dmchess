@@ -9,13 +9,13 @@ namespace Chess
     class Program
     {
         static String[,] chessBoard={
-        {"r","k","b","q","a","b","k","r"},
+        {"r"," ","b","q","a","b","k","r"},
         {"p","p","p","p","p","p","p","p"},
+        {"k"," "," "," "," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
+        {" "," "," ","P"," "," "," "," "},
         {" "," "," "," "," "," "," "," "},
-        {" "," "," "," "," "," "," "," "},
-        {" "," "," "," "," "," "," "," "},
-        {"P","P","P","P","P","P","P","P"},
+        {"P","P","P"," ","P","P","P","P"},
         {"R","K","B","Q","A","B","K","R"}};
 
 		static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
@@ -104,18 +104,26 @@ namespace Chess
 			{
 				kingPositionL++;
 			}
-            makeMove("7150 ");
-            undoMove("7150 ");
+            //makeMove("7150 ");
+            //undoMove("7150 ");
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++){
                     System.Console.Write(chessBoard[i, j] + ";");
                 }
                 System.Console.WriteLine();
-			}
-            
-            System.Console.WriteLine(possibleMove());
-		}
+            }
+            flipboard();
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    System.Console.Write(chessBoard[i, j] + ";");
+                }
+                System.Console.WriteLine();
+            }
+            //System.Console.WriteLine(possibleMove());
+        }
         public static void makeMove(String move)
         {
             if (move[4] != 'P' && move[4] != 'C')
@@ -155,6 +163,35 @@ namespace Chess
                 //If castling
 
             }
+        }
+        public static void flipboard()
+        {
+            String temp;
+            for(int i = 0; i < 32; i++)
+            {
+                int row = i / 8, col = i % 8;
+                if (Char.IsUpper(chessBoard[row,col],0))
+                {
+                    temp = chessBoard[row, col].ToLower();
+                }
+                else
+                {
+                    temp = chessBoard[row, col].ToUpper();
+                }
+                if (Char.IsUpper(chessBoard[7 - row, 7 - col], 0))
+                {
+                    chessBoard[row , col] = chessBoard[7 - row, 7 - col].ToLower();
+                }
+                else
+                {
+                    chessBoard[row, col] = chessBoard[7 - row, 7 - col].ToUpper();
+                }
+                chessBoard[7 - row, 7 - col] = temp;
+            }
+            int temp1 = kingPositionU;
+            kingPositionU = 63 - kingPositionL;
+            kingPositionL = 63 - temp1;
+
         }
         public static String possibleMove()
         {
