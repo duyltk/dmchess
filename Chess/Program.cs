@@ -90,6 +90,10 @@ namespace Chess
         
         static int kingPositionU;
 		static int kingPositionL;
+        static bool castlingUShort = true;
+		static bool castlingULong = true;
+		static bool castlingLShort = true;
+		static bool castlingLLong = true;
 
 		public static void Main(string[] args)
         {
@@ -171,31 +175,48 @@ namespace Chess
         }
         public static void makeMove(String move)
         {
-            if (move[4] != 'P' && move[4] != 'C')
+			//[5]-P: Promotion Pawn. C: Castling.
+            //!= Regularly, [PreviousRow, PreviousColume, NextRow, NextColume, capturedPiece]
+			if (move[4] != 'P' && move[4] != 'C')
             {
                 chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])] = chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])];
                 chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = " ";
-
-            }
+                //If move postion king .
+                if ("A".Equals(chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])])){
+                    kingPositionU = 8 * (int)Char.GetNumericValue(move[2]) + (int)Char.GetNumericValue(move[3]);
+                }
+			}
             else if (move[4] == 'P')
             {
                 //If pawm promotion
-                //[0]ColumePrevious, [1]ColumeNext, [2]CapturePiece, [3]PromotionPiece, P
+                //[0]ColumePrevious, [1]ColumeNext, [2]CapturePiece, [3]PromotionPiece
                 chessBoard[1, (int)Char.GetNumericValue(move[0])] = " ";
                 chessBoard[0, (int)Char.GetNumericValue(move[1])] = move[3].ToString();
             }
             else
             {
-                //If castling
-                
-            }
+				//If castling [5]-C
+				//[PreviousKingColume, PreviousRockColume, NextKingColume, NextRockColume]
+				chessBoard[7, (int)Char.GetNumericValue(move[0])] = " ";
+				chessBoard[7, (int)Char.GetNumericValue(move[1])] = " ";
+				chessBoard[7, (int)Char.GetNumericValue(move[2])] = "A";
+				chessBoard[7, (int)Char.GetNumericValue(move[3])] = "R";
+                kingPositionU = 8 * 7 + (int)Char.GetNumericValue(move[2]);
+			}
         }
         public static void undoMove(String move)
         {
-            if (move[4] != 'P' && move[4] != 'C')
+			//[5]-P: Promotion Pawn. C: Castling.
+			//!= Regularly, [PreviousRow, PreviousColume, NextRow, NextColume, capturedPiece]
+			if (move[4] != 'P' && move[4] != 'C')
             {
                 chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])];
                 chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])] = move[4].ToString();
+				//If move postion king .
+				if ("A".Equals(chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])]))
+				{
+					kingPositionU = 8 * (int)Char.GetNumericValue(move[0]) + (int)Char.GetNumericValue(move[1]);
+				}
             }
             else if (move[4] == 'P')
             {
@@ -206,8 +227,13 @@ namespace Chess
             }
             else
             {
-                //If castling
-
+				//If castling [5]-C
+				//[PreviousKingColume, PreviousRockColume, NextKingColume, NextRockColume]
+				chessBoard[7, (int)Char.GetNumericValue(move[0])] = "A";
+				chessBoard[7, (int)Char.GetNumericValue(move[1])] = "R";
+				chessBoard[7, (int)Char.GetNumericValue(move[2])] = " ";
+				chessBoard[7, (int)Char.GetNumericValue(move[3])] = " ";
+				kingPositionU = 8 * 7 + (int)Char.GetNumericValue(move[0]);
             }
         }
         public static void flipboard()
@@ -303,6 +329,88 @@ namespace Chess
                     catch (Exception) { }
                 }
             }
+            //Castling Upper Long
+            if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 0]) && castlingULong && safeKing() && " ".Equals(chessBoard[7, 2]) && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 0])){
+                bool flag = true;
+                for (int j = 1; j <= 3; j++)
+                {
+                    makeMove("747" + j.ToString() + " ");
+					//Check square where lower pieces can move to square king castling.
+					 if (!safeKing()){
+                        flag = false;
+                        undoMove("747" + j.ToString() + " ");
+                        break;
+                    }
+					undoMove("747" + j.ToString() + " ");
+				}
+                if (flag)
+                {
+                    list = list + "4023C";
+                }
+            }
+			//Castling Upper Short
+            if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 7]) && castlingUShort && safeKing() && " ".Equals(chessBoard[7, 5]) && " ".Equals(chessBoard[7, 6]))
+			{
+				bool flag = true;
+				for (int j = 5; j <= 6; j++)
+				{
+					makeMove("747" + j.ToString() + " ");
+					//Check square where lower pieces can move to square king castling.
+					if (!safeKing())
+					{
+						flag = false;
+						undoMove("747" + j.ToString() + " ");
+						break;
+					}
+					undoMove("747" + j.ToString() + " ");
+				}
+				if (flag)
+				{
+					list = list + "4765C";
+				}
+			}
+			//Castling Lower Long
+            if ("A".Equals(chessBoard[7, 3]) && "R".Equals(chessBoard[7, 7]) && castlingLLong && safeKing() && " ".Equals(chessBoard[7, 4]) && " ".Equals(chessBoard[7, 5]) && " ".Equals(chessBoard[7, 6]))
+			{
+				bool flag = true;
+				for (int j = 4; j <= 6; j++)
+				{
+					makeMove("747" + j.ToString() + " ");
+					//Check square where lower pieces can move to square king castling.
+					if (!safeKing())
+					{
+						flag = false;
+						undoMove("747" + j.ToString() + " ");
+						break;
+					}
+					undoMove("747" + j.ToString() + " ");
+				}
+				if (flag)
+				{
+					list = list + "3754C";
+				}
+			}
+			//Castling Lower Short
+			if ("A".Equals(chessBoard[7, 3]) && "R".Equals(chessBoard[7, 0]) && castlingLShort && safeKing() && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 2]))
+			{
+				bool flag = true;
+				for (int j = 1; j <= 2; j++)
+				{
+					makeMove("747" + j.ToString() + " ");
+					//Check square where lower pieces can move to square king castling.
+					if (!safeKing())
+					{
+						flag = false;
+						undoMove("747" + j.ToString() + " ");
+						break;
+					}
+					undoMove("747" + j.ToString() + " ");
+				}
+				if (flag)
+				{
+					list = list + "3012C";
+				}
+			}
             return list;
         }
         public static String possibleB(int i)
