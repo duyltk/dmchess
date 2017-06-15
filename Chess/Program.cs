@@ -8,6 +8,8 @@ namespace Chess
 {
     class Program
     {
+        static int globalDepth = 4;
+        static int node = 0;
         static String[,] chessBoard2={
 		{"r","k","b","q","a","b","k","r"},
 		{"p","p","p","p","p","p","p","p"},
@@ -121,11 +123,12 @@ namespace Chess
 			{
 				kingPositionL++;
 			}
-
+            globalDepth = 2;
 			drawChessBoard();
 			System.Console.WriteLine(possibleMove());
-            System.Console.Write(alphaBeta(4, int.MinValue, int.MaxValue, "", 1));
-
+            System.Console.WriteLine(alphaBeta(globalDepth, int.MinValue, int.MaxValue, "", 1));
+            Console.WriteLine(node);
+            Console.ReadLine();
 			//flipboard();
 		}
         public static void drawChessBoard()
@@ -141,12 +144,57 @@ namespace Chess
         }
         public static String alphaBeta(int depth, int alpha, int beta, String move, int player)
         {
+            //String list = possibleMove();
+            //if (depth == 0 || list.Length == 0) return move + rating();
+            //if (player == 1) // Computer's turn
+            //{
+            //    for (int i = 0; i < list.Length; i += 5)
+            //    {
+            //        makeMove(list.Substring(i, 5));
+            //        node++;
+            //        flipboard();
+            //        String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1 - player);
+            //        flipboard();
+            //        undoMove(list.Substring(i, 5));
+            //        int value = int.Parse(resultString.Substring(5));
+            //        if (alpha < value)
+            //        {
+            //            alpha = value;
+            //            if (depth == globalDepth)
+            //                move = resultString.Substring(0, 5);
+            //        }
+            //        if (alpha >= beta) break;
+            //    }
+            //    return move + alpha;
+            //}
+            //else // Human's turn
+            //{
+            //    for (int i = 0; i < list.Length; i += 5)
+            //    {
+            //        makeMove(list.Substring(i, 5));
+            //        node++;
+            //        flipboard();
+            //        String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1 - player);
+            //        flipboard();
+            //        undoMove(list.Substring(i, 5));
+            //        int value = int.Parse(resultString.Substring(5));
+            //        if (beta > value)
+            //        {
+            //            beta = value;
+            //            if (depth == globalDepth)
+            //                move = resultString.Substring(0, 5);
+            //        }
+            //        if (alpha >= beta) break;
+            //    }
+            //    return move + beta;
+            //}
             String list = possibleMove();
-            
-            if (depth == 0 || list.Length == 0) return move + rating().ToString();
+
+            if (depth == 0 || list.Length == 0) return move + rating();
 
             for (int i = 0; i < list.Length; i += 5)
             {
+                node++;
                 makeMove(list.Substring(i, 5));
                 flipboard();
 
@@ -163,27 +211,30 @@ namespace Chess
                     {
                         alpha = Eval;
                     }
-                    if (depth == 4){
+                    if (depth == 4)
+                    {
                         move = list.Substring(i, 5);
                     }
-                        
+
                 }
                 else
                 {
-                    if (beta >= Eval){
+                    if (beta >= Eval)
+                    {
                         beta = Eval;
                     }
                 }
 
-                if (alpha >= beta){
+                if (alpha >= beta)
+                {
                     break;
                 }
             }
             if (player != 1)
             {
-                return ( move + alpha ) ;
+                return (move + alpha);
             }
-            else return ( move + beta );
+            else return (move + beta);
 
         }
         public static int rating()
