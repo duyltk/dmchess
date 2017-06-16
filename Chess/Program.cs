@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -123,7 +123,7 @@ namespace Chess
 			{
 				kingPositionL++;
 			}
-            globalDepth = 2;
+            globalDepth = 4;
 			drawChessBoard();
 			System.Console.WriteLine(possibleMove());
             System.Console.WriteLine(alphaBeta(globalDepth, int.MinValue, int.MaxValue, "", 1));
@@ -192,26 +192,27 @@ namespace Chess
 
             if (depth == 0 || list.Length == 0) return move + rating();
 
-            for (int i = 0; i < list.Length; i += 5)
+			player = 1 - player ;
+
+			for (int i = 0; i < list.Length; i += 5)
             {
-                node++;
+				node++;
                 makeMove(list.Substring(i, 5));
                 flipboard();
 
-                player = player - 1;
                 String moveEval = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), player);
                 int Eval = int.Parse(moveEval.Substring(5));
 
                 flipboard();
                 undoMove(list.Substring(i, 5));
 
-                if (player != 1) //Computer turn
+                if (player == 0) //Computer turn
                 {
                     if (alpha < Eval)
                     {
                         alpha = Eval;
                     }
-                    if (depth == 4)
+                    if (depth == globalDepth)
                     {
                         move = list.Substring(i, 5);
                     }
@@ -219,7 +220,7 @@ namespace Chess
                 }
                 else
                 {
-                    if (beta >= Eval)
+                    if (beta > Eval)
                     {
                         beta = Eval;
                     }
@@ -232,9 +233,9 @@ namespace Chess
             }
             if (player != 1)
             {
-                return (move + alpha);
+                return move + alpha;
             }
-            else return (move + beta);
+            else return move + beta;
 
         }
         public static int rating()
@@ -846,5 +847,38 @@ namespace Chess
             }
             return true;
         }
+		public static int pointMaterial() //http://chessprogramming.wikispaces.com/Point+Value#cite_note-18 Larrry Kauman
+		{
+            int point = 0;
+            int countB = 0; //Count bishop;
+
+            for (int i = 0; i < 64; i++)
+            {
+                if (" ".Equals(chessBoard[i / 8, i % 8]))
+                    continue;
+                switch (chessBoard[i / 8, i % 8])
+                {
+                    case "P":
+                        point += 100;
+                        break;
+                    case "K":
+                        point += 350;
+                        break;
+                    case "B":
+                        point += 300;
+                        countB++;
+                        if (countB == 2) //Bonus 50point for bishop.
+                            point += 50; 
+                        break;
+                    case "R":
+                        point += 525;
+                        break;
+                    case "Q":
+                        point += 1000;
+                        break;
+                }
+            }
+			return point;
+		}
     }
 }
