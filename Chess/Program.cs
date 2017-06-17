@@ -21,7 +21,7 @@ namespace Chess
 		{"R","K","B","Q","A","B","K","R"}
         };
         
-<<<<<<< HEAD
+
 		public static String[,] chessBoard={
         {"r","k","b","q","a","b","k","r"},
         {"p","p","p","p","p","p","p","p"},
@@ -32,18 +32,7 @@ namespace Chess
         {"P","P","P","P","P","P","P","P"},
         {"R","K","B","Q","A","B","K","R"}
         };
-=======
-		static String[,] chessBoard={
-		{"r","k","b","q","a","b","k","r"},
-		{"p","p","p","p","p","p","p","p"},
-		{" "," "," "," "," "," "," "," "},
-		{" "," "," "," "," "," "," "," "},
-		{" "," "," "," "," "," "," "," "},
-		{" "," "," "," "," "," "," "," "},
-		{"P","P","P","P","P","P","P","P"},
-		{"R","K","B","Q","A","B","K","R"}
-		};
->>>>>>> 0b5d461e20d07478d3440c47e1ced81b9bc575d6
+
 
 
         static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
@@ -122,13 +111,15 @@ namespace Chess
 		static bool castlingULong = true;
 		static bool castlingLShort = true;
 		static bool castlingLLong = true;
-
-		public static void Main(string[] args)
+        [STAThread]
+        public static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Form1 form = new Form1();
+
             Application.Run(form);
-			kingPositionU = 0;
+            
+            kingPositionU = 0;
             while(!"A".Equals(chessBoard[kingPositionU / 8, kingPositionU % 8]))
             {
                 kingPositionU++;
@@ -141,11 +132,15 @@ namespace Chess
             globalDepth = 4;
 			drawChessBoard();
 			System.Console.WriteLine(possibleMove());
-            System.Console.WriteLine(alphaBeta(globalDepth, int.MinValue, int.MaxValue, "", 1));
+            form.Show();
+            
+            makeMove(alphaBeta(globalDepth, int.MinValue, int.MaxValue, "", 1));
             Console.WriteLine(node);
             Console.ReadLine();
-			//flipboard();
-		}
+            
+            
+            
+        }
         public static void drawChessBoard()
         {
             for (int i = 0; i < 8; i++)
@@ -205,25 +200,20 @@ namespace Chess
             //}
             String list = possibleMove();
 
-<<<<<<< HEAD
-            if (depth == 0 || list.Length == 0) return move + rating().ToString();
-            player = 1- player;
-            for (int i = 0; i < list.Length; i += 5)
-=======
+
+            
+
             if (depth == 0 || list.Length == 0) return move + rating();
 
 			player = 1 - player ;
 
 			for (int i = 0; i < list.Length; i += 5)
->>>>>>> 0b5d461e20d07478d3440c47e1ced81b9bc575d6
+
             {
 				node++;
                 makeMove(list.Substring(i, 5));
                 flipboard();
-<<<<<<< HEAD
-=======
 
->>>>>>> 0b5d461e20d07478d3440c47e1ced81b9bc575d6
                 String moveEval = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), player);
                 int Eval = int.Parse(moveEval.Substring(5));
 
