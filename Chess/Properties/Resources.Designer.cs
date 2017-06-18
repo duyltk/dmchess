@@ -143,6 +143,16 @@ namespace Chess.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap circle_512 {
+            get {
+                object obj = ResourceManager.GetObject("circle_512", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap king {
             get {
                 object obj = ResourceManager.GetObject("king", resourceCulture);

@@ -135,6 +135,7 @@ namespace Chess
             
             
             makeMove(alphaBeta(globalDepth, int.MinValue, int.MaxValue, "", 1));
+            drawChessBoard();
             Console.WriteLine(node);
             Console.ReadLine();
             
@@ -272,8 +273,9 @@ namespace Chess
                 chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = " ";
                 //If move postion king .
                 if ("A".Equals(chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])])){
-                    kingPositionU = 8 * (int)Char.GetNumericValue(move[2]) + (int)Char.GetNumericValue(move[3]);
+                    kingPositionU = 8 * (int)Char.GetNumericValue(move[2]) + (int)Char.GetNumericValue(move[3]);                   
                 }
+                
 			}
             else if (move[4] == 'P')
             {
@@ -292,7 +294,9 @@ namespace Chess
 				chessBoard[7, (int)Char.GetNumericValue(move[2])] = "A";
 				chessBoard[7, (int)Char.GetNumericValue(move[3])] = "R";
                 kingPositionU = 8 * 7 + (int)Char.GetNumericValue(move[2]);
-			}
+                castlingULong = false; 
+                castlingUShort = false;
+            }
         }
         public static void undoMove(String move)
         {

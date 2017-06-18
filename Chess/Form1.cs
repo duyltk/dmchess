@@ -17,12 +17,14 @@ namespace Chess
         int newMouseX, newMouseY;
         String Move = "lol";
         bool flag = false;
+      
         public Form1()
         {
             InitializeComponent();
         }
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
+            
             Graphics g = e.Graphics;                    
             GraphicsUnit unit = GraphicsUnit.Pixel;            
             SolidBrush white = new SolidBrush(Color.PeachPuff);
@@ -91,7 +93,38 @@ namespace Chess
                         break;
                 }
             }
-            
+
+
+            String possibleMoveUser = MoveIllegal(mouseY, mouseX);
+            //label1.Text = possibleMoveUser;
+            if (possibleMoveUser.Length != 0)
+            {
+                for (int i = 0; i < possibleMoveUser.Length; i += 5)
+                {
+                    String temp = possibleMoveUser.Substring(i, 5);
+
+                    bm = Properties.Resources.circle_512;
+                    if (temp[4] == 'P')
+                    {
+                        Rectangle rect = new Rectangle(Int32.Parse(temp[1].ToString()) * squareSize + 10, 0 * squareSize + 10, 40, 40);
+                        g.DrawImage(bm, rect, 0, 0, 1000, 1000, unit);
+                    }
+                    else if (temp[4] == 'C')
+                    {
+                        Rectangle rect = new Rectangle(Int32.Parse(temp[2].ToString()) * squareSize + 10, 7 * squareSize + 10, 40, 40);
+                        g.DrawImage(bm, rect, 0, 0, 1000, 1000, unit);
+                        Rectangle rect1 = new Rectangle(Int32.Parse(temp[3].ToString()) * squareSize + 10, 7 * squareSize + 10, 40, 40);
+                        g.DrawImage(bm, rect1, 0, 0, 1000, 1000, unit);
+                    }
+                    else if (temp[4] != 'P' && temp[4] != 'C')
+                    {
+                        Rectangle rect = new Rectangle(Int32.Parse(temp[3].ToString()) * squareSize + 10, Int32.Parse(temp[2].ToString()) * squareSize + 10, 40, 40);
+                        g.DrawImage(bm, rect, 0, 0, 1000, 1000, unit);
+                    }
+
+                }
+            }
+
         }
        
 
@@ -100,6 +133,7 @@ namespace Chess
             
             mouseX = e.X;
             mouseY = e.Y;
+            this.Refresh();
             
         }
 
@@ -107,6 +141,7 @@ namespace Chess
         { 
             newMouseX = e.X;
             newMouseY = e.Y;
+            
             int newRow = newMouseY / squareSize;
             int newCol = newMouseX / squareSize;
             int oldRow = mouseY / squareSize;
@@ -120,12 +155,12 @@ namespace Chess
                 if (oldCol > newCol)
                 {
                     Move = "" + oldCol + "0" + newCol + (newCol + 1) + "C";
-                    label1.Text = Move;
+                   
                 }
                 else if (oldCol < newCol)// right
                 {
                     Move = "" + oldCol + "7" + newCol + (newCol - 1) + "C";
-                    label1.Text = Move;
+                    
                 }
             }
             else
@@ -133,10 +168,19 @@ namespace Chess
                 Move = "" + (oldRow) + (oldCol) + (newRow) + (newCol) + (Program.chessBoard[(newRow), (newCol)]);
             }
             String possibleMoveUser = MoveIllegal(mouseY, mouseX);
-            label2.Text = possibleMoveUser;
+            //label1.Text = Move;
+            //label2.Text = possibleMoveUser;
             if (possibleMoveUser.Contains(Move))
-            {               
+            {
+                
                 Program.makeMove(Move);
+                this.Refresh();
+                Program.flipboard();
+                String temp = Program.alphaBeta(4, int.MinValue, int.MaxValue, "", 1);
+                
+                Program.makeMove(temp); 
+
+                Program.flipboard();
                 this.Refresh();
             }
 
