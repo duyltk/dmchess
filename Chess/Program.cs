@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -132,24 +132,15 @@ namespace Chess
                 kingPositionL++;
             }
             globalDepth = 4;
-<<<<<<< HEAD
-			drawChessBoard();
-			System.Console.WriteLine(possibleMove());
-            
-            
-            makeMove(alphaBeta(globalDepth, int.MinValue, int.MaxValue, "", 1));
-            drawChessBoard();
-            Console.WriteLine(node);
-            Console.ReadLine();
-=======
+
             drawChessBoard();
             System.Console.WriteLine(possibleMove());
             System.Console.WriteLine(alphaBeta(globalDepth, -1000000, 1000000, "", 0));
             System.Console.WriteLine(node);
-            //Console.ReadLine();
+            Console.ReadLine();
             //flipboard();
 
->>>>>>> e36c2570caf06b134d9101b60d19612090b1aa32
+
             
             
             
@@ -307,19 +298,13 @@ namespace Chess
                 chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])] = chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])];
                 chessBoard[(int)Char.GetNumericValue(move[0]), (int)Char.GetNumericValue(move[1])] = " ";
                 //If move postion king .
-<<<<<<< HEAD
+
                 if ("A".Equals(chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])])){
                     kingPositionU = 8 * (int)Char.GetNumericValue(move[2]) + (int)Char.GetNumericValue(move[3]);                   
                 }
                 
 			}
-=======
-                if ("A".Equals(chessBoard[(int)Char.GetNumericValue(move[2]), (int)Char.GetNumericValue(move[3])]))
-                {
-                    kingPositionU = 8 * (int)Char.GetNumericValue(move[2]) + (int)Char.GetNumericValue(move[3]);
-                }
-            }
->>>>>>> e36c2570caf06b134d9101b60d19612090b1aa32
+
             else if (move[4] == 'P')
             {
                 //If pawm promotion
@@ -337,11 +322,7 @@ namespace Chess
                 chessBoard[7, (int)Char.GetNumericValue(move[3])] = "R";
 
                 kingPositionU = 8 * 7 + (int)Char.GetNumericValue(move[2]);
-<<<<<<< HEAD
-                castlingULong = false; 
-                castlingUShort = false;
-=======
->>>>>>> e36c2570caf06b134d9101b60d19612090b1aa32
+
             }
         }
         public static void undoMove(String move)
@@ -470,12 +451,9 @@ namespace Chess
                 }
             }
             //Castling Upper Long
-<<<<<<< HEAD
-            if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 0]) && castlingULong && safeKing() && " ".Equals(chessBoard[7, 2]) && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 0]))
-            {
-=======
+
             if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 0]) && castlingULong && safeKing() && " ".Equals(chessBoard[7, 2]) && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 3])){
->>>>>>> 8701deec7181f087592343eb26d989e7f5aaa685
+
                 bool flag = true;
                 for (int j = 1; j <= 3; j++)
                 {
