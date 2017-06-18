@@ -132,7 +132,7 @@ namespace Chess
             globalDepth = 4;
 			drawChessBoard();
 			System.Console.WriteLine(possibleMove());
-            form.Show();
+            
             
             makeMove(alphaBeta(globalDepth, int.MinValue, int.MaxValue, "", 1));
             Console.WriteLine(node);
@@ -286,6 +286,7 @@ namespace Chess
             {
 				//If castling [5]-C
 				//[PreviousKingColume, PreviousRockColume, NextKingColume, NextRockColume]
+                
 				chessBoard[7, (int)Char.GetNumericValue(move[0])] = " ";
 				chessBoard[7, (int)Char.GetNumericValue(move[1])] = " ";
 				chessBoard[7, (int)Char.GetNumericValue(move[2])] = "A";
@@ -419,7 +420,7 @@ namespace Chess
                 }
             }
             //Castling Upper Long
-            if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 0]) && castlingULong && safeKing() && " ".Equals(chessBoard[7, 2]) && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 0])){
+            if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 0]) && castlingULong && safeKing() && " ".Equals(chessBoard[7, 2]) && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 3])){
                 bool flag = true;
                 for (int j = 1; j <= 3; j++)
                 {

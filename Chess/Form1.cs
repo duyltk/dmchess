@@ -52,7 +52,8 @@ namespace Chess
                         bm = Properties.Resources.bbishop;
                         g.DrawImage(bm, rect, 0, 0, 200, 200, unit);
                         break;
-                    case "q": 
+                    case "q":
+                        bm = Properties.Resources.bqueen;
                         g.DrawImage(bm, rect, 0, 0, 200, 200, unit);
                         break;
                     case "a":
@@ -106,10 +107,33 @@ namespace Chess
         { 
             newMouseX = e.X;
             newMouseY = e.Y;
-            Move = "" + (mouseY / squareSize) + (mouseX / squareSize) + (newMouseY / squareSize) + (newMouseX / squareSize) + (Program.chessBoard[(newMouseY / squareSize), (newMouseX / squareSize)]);
-            
+            int newRow = newMouseY / squareSize;
+            int newCol = newMouseX / squareSize;
+            int oldRow = mouseY / squareSize;
+            int oldCol = mouseX / squareSize;
+            if (newRow == 0 && oldRow == 1 && "P".Equals(Program.chessBoard[oldRow, oldCol]))
+            {
+                Move = "" + oldCol + newCol + Program.chessBoard[newRow, newCol] + "QP"; // assume that P promote into Q
+            }
+            else if(Math.Abs(newCol - oldCol) == 2 && "A".Equals(Program.chessBoard[oldRow, oldCol])){
+                //left
+                if (oldCol > newCol)
+                {
+                    Move = "" + oldCol + "0" + newCol + (newCol + 1) + "C";
+                    label1.Text = Move;
+                }
+                else if (oldCol < newCol)// right
+                {
+                    Move = "" + oldCol + "7" + newCol + (newCol - 1) + "C";
+                    label1.Text = Move;
+                }
+            }
+            else
+            {
+                Move = "" + (oldRow) + (oldCol) + (newRow) + (newCol) + (Program.chessBoard[(newRow), (newCol)]);
+            }
             String possibleMoveUser = MoveIllegal(mouseY, mouseX);
-            
+            label2.Text = possibleMoveUser;
             if (possibleMoveUser.Contains(Move))
             {               
                 Program.makeMove(Move);
@@ -122,28 +146,22 @@ namespace Chess
         {
             String possibleMoveUser = "";            
             switch (Program.chessBoard[mouseY / squareSize, mouseX / squareSize])
-            {
-                case "p":
+            {                
                 case "P":
                     possibleMoveUser = Program.possibleP(mouseY / squareSize * 8 + mouseX / squareSize);
-                    break;
-                case "r":
+                    break;                
                 case "R":
                     possibleMoveUser = Program.possibleR(mouseY / squareSize * 8 + mouseX / squareSize);
-                    break;
-                case "k":
+                    break;                
                 case "K":
                     possibleMoveUser = Program.possibleK(mouseY / squareSize * 8 + mouseX / squareSize);
-                    break;
-                case "b":
+                    break;                
                 case "B":
                     possibleMoveUser = Program.possibleB(mouseY / squareSize * 8 + mouseX / squareSize);
-                    break;
-                case "q":
+                    break;                
                 case "Q":
                     possibleMoveUser = Program.possibleQ(mouseY / squareSize * 8 + mouseX / squareSize);
-                    break;
-                case "a":
+                    break;                
                 case "A":
                     possibleMoveUser = Program.possibleA(mouseY / squareSize * 8 + mouseX / squareSize);
                     break;
