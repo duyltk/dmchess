@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 c:/users/bigzero/documents/visual studio 2013/Projects/Chess/Chess/bin/Debug/Chess.exe.config
 c:/users/bigzero/documents/visual studio 2013/Projects/Chess/Chess/obj/Debug/Chess.csprojResolveAssemblyReference.cache
 c:/users/bigzero/documents/visual studio 2013/Projects/Chess/Chess/bin/Debug/Chess.exe
@@ -11,3 +12,20 @@ c:/users/bigzero/documents/visual studio 2013/Projects/Chess/Chess/obj/Debug/Che
 /Users/bigzero/Desktop/DMChess/Chess/obj/Debug/Chess.csproj.CoreCompileInputs.cache
 /Users/bigzero/Desktop/DMChess/Chess/obj/Debug/Chess.exe
 /Users/bigzero/Desktop/DMChess/Chess/obj/Debug/Chess.pdb
+=======
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\bin\Debug\Chess.exe.config
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\bin\Debug\Chess.exe
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\bin\Debug\Chess.pdb
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\obj\Debug\Chess.exe
+c:\users\bigzero\documents\visual studio 2013\Projects\Chess\Chess\obj\Debug\Chess.pdb
+C:\Users\UchihaKakashi\Documents\Github\Chess\bin\Debug\Chess.exe.config
+C:\Users\UchihaKakashi\Documents\Github\Chess\bin\Debug\Chess.exe
+C:\Users\UchihaKakashi\Documents\Github\Chess\bin\Debug\Chess.pdb
+C:\Users\UchihaKakashi\Documents\Github\Chess\obj\Debug\Chess.csprojResolveAssemblyReference.cache
+C:\Users\UchihaKakashi\Documents\Github\Chess\obj\Debug\Chess.exe
+C:\Users\UchihaKakashi\Documents\Github\Chess\obj\Debug\Chess.pdb
+C:\Users\UchihaKakashi\Documents\Github\Chess\obj\Debug\Chess.Form1.resources
+C:\Users\UchihaKakashi\Documents\Github\Chess\obj\Debug\Chess.csproj.GenerateResource.Cache
+C:\Users\UchihaKakashi\Documents\Github\Chess\obj\Debug\Chess.Properties.Resources.resources
+>>>>>>> 8701deec7181f087592343eb26d989e7f5aaa685

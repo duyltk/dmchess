@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows.Forms;
 namespace Chess
 {
     class Program
@@ -21,18 +21,21 @@ namespace Chess
         {"R","K","B","Q","A","B","K","R"}
         };
 
-        static String[,] chessBoard ={
-        {"r","k","b","q"," ","b","k","r"},
-		{"p","p","p","p","a","p","p","p"},
-		{" "," "," "," "," "," "," "," "},
-		{" "," "," "," "," "," "," "," "},
-		{" "," "," "," "," "," "," "," "},
-		{" "," "," ","Q"," "," "," "," "},
-		{"P","P","P","P","P","P","P","P"},
-		{"R","K","B"," ","A","B","R","R"}
+
+		public static String[,] chessBoard={
+        {"r","k","b","q","a","b","k","r"},
+        {"p","p","p","p","p","p","p","p"},
+        {" "," "," "," "," "," "," "," "},
+        {" "," "," "," "," "," "," "," "},
+        {" "," "," "," "," "," "," "," "},
+        {" "," "," "," "," "," "," "," "},
+        {"P","P","P","P","P","P","P","P"},
+        {"R","K","B","Q","A","B","K","R"}
         };
 
-        static int[,] pawnBoard ={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
+
+
+        static int[,] pawnBoard={//attribute to http://chessprogramming.wikispaces.com/Simplified+evaluation+function
         { 0,  0,  0,  0,  0,  0,  0,  0},
         {50, 50, 50, 50, 50, 50, 50, 50},
         {10, 10, 20, 30, 30, 20, 10, 10},
@@ -109,11 +112,17 @@ namespace Chess
         static bool castlingLShort = true;
         static bool castlingLLong = true;
 
+
         public static void Main(string[] args)
         {
+            Application.EnableVisualStyles();
+            Form1 form = new Form1();
 
             kingPositionU = 0;
-            while (!"A".Equals(chessBoard[kingPositionU / 8, kingPositionU % 8]))
+            Application.Run(form);
+            
+            kingPositionU = 0;
+            while(!"A".Equals(chessBoard[kingPositionU / 8, kingPositionU % 8]))
             {
                 kingPositionU++;
             }
@@ -129,6 +138,10 @@ namespace Chess
             System.Console.WriteLine(node);
             //Console.ReadLine();
             //flipboard();
+
+            
+            
+            
         }
         public static void drawChessBoard()
         {
@@ -171,6 +184,107 @@ namespace Chess
 				}
 			}
 			if (player == 0) { return move + beta; } else { return move + alpha; }
+            //String list = possibleMove();
+            //if (depth == 0 || list.Length == 0) return move + rating();
+            //if (player == 1) // Computer's turn
+            //{
+            //    for (int i = 0; i < list.Length; i += 5)
+            //    {
+            //        makeMove(list.Substring(i, 5));
+            //        node++;
+            //        flipboard();
+            //        String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1 - player);
+            //        flipboard();
+            //        undoMove(list.Substring(i, 5));
+            //        int value = int.Parse(resultString.Substring(5));
+            //        if (alpha < value)
+            //        {
+            //            alpha = value;
+            //            if (depth == globalDepth)
+            //                move = resultString.Substring(0, 5);
+            //        }
+            //        if (alpha >= beta) break;
+            //    }
+            //    return move + alpha;
+            //}
+            //else // Human's turn
+            //{
+            //    for (int i = 0; i < list.Length; i += 5)
+            //    {
+            //        makeMove(list.Substring(i, 5));
+            //        node++;
+            //        flipboard();
+            //        String resultString = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), 1 - player);
+            //        flipboard();
+            //        undoMove(list.Substring(i, 5));
+            //        int value = int.Parse(resultString.Substring(5));
+            //        if (beta > value)
+            //        {
+            //            beta = value;
+            //            if (depth == globalDepth)
+            //                move = resultString.Substring(0, 5);
+            //        }
+            //        if (alpha >= beta) break;
+            //    }
+            //    return move + beta;
+            //}
+//            String list = possibleMove();
+//
+//
+//            
+//
+//            if (depth == 0 || list.Length == 0) return move + rating();
+//
+//			player = 1 - player ;
+//
+//			for (int i = 0; i < list.Length; i += 5)
+//
+//            {
+//				node++;
+//                makeMove(list.Substring(i, 5));
+//                flipboard();
+//
+//                String moveEval = alphaBeta(depth - 1, alpha, beta, list.Substring(i, 5), player);
+//                int Eval = int.Parse(moveEval.Substring(5));
+//
+//                flipboard();
+//                undoMove(list.Substring(i, 5));
+//
+//                if (player == 0) //Computer turn
+//                {
+//                    if (alpha < Eval)
+//                    {
+//                        alpha = Eval;
+//                    }
+//                    if (depth == globalDepth)
+//                    {
+//                        move = list.Substring(i, 5);
+//                    }
+//
+//                }
+//                else
+//                {
+//                    if (beta > Eval)
+//                    {
+//                        beta = Eval;
+//                    }
+//                    if (depth == globalDepth)
+//                    {
+//                        move = list.Substring(i, 5);
+//                    }
+//                }
+//
+//                if (alpha >= beta)
+//                {
+//                    break;
+//                }
+//            }
+//            if (player != 1)
+//            {
+//                return move + alpha;
+//            }
+//            else return move + beta;
+
         }
 
         public static void makeMove(String move)
@@ -202,6 +316,7 @@ namespace Chess
                 chessBoard[7, (int)Char.GetNumericValue(move[1])] = " ";
                 chessBoard[7, (int)Char.GetNumericValue(move[2])] = "A";
                 chessBoard[7, (int)Char.GetNumericValue(move[3])] = "R";
+
                 kingPositionU = 8 * 7 + (int)Char.GetNumericValue(move[2]);
             }
         }
@@ -331,8 +446,12 @@ namespace Chess
                 }
             }
             //Castling Upper Long
+<<<<<<< HEAD
             if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 0]) && castlingULong && safeKing() && " ".Equals(chessBoard[7, 2]) && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 0]))
             {
+=======
+            if ("A".Equals(chessBoard[7, 4]) && "R".Equals(chessBoard[7, 0]) && castlingULong && safeKing() && " ".Equals(chessBoard[7, 2]) && " ".Equals(chessBoard[7, 1]) && " ".Equals(chessBoard[7, 3])){
+>>>>>>> 8701deec7181f087592343eb26d989e7f5aaa685
                 bool flag = true;
                 for (int j = 1; j <= 3; j++)
                 {
